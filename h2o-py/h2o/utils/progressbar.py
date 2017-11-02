@@ -96,6 +96,14 @@ class ProgressBar(object):
         assert_is_type(maxval, numeric)
         assert_is_type(widgets, None, [str, ProgressBarWidget])
         assert_is_type(file_mode, None, bool)
+
+        # Fix for PUBDEV-5048
+        def isatty(self):
+            return False
+
+        type(sys.stdout).isatty = isatty
+        type(sys.stdout).encoding = "UTF-8"
+
         if title is None: title = "Progress"
         if file_mode is None: file_mode = not sys.stdout.isatty()
 
